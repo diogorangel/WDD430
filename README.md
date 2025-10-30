@@ -1,4 +1,4 @@
-WDD340 - Diogo Rangel Dos Santo 
+WDD340 - Diogo Rangel Dos Santos @diogorangel 
 React 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
