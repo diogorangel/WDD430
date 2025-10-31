@@ -6,7 +6,7 @@ export function TodoList({ todos, toggleTodo, deleteTodo }) {
   return (
     <ul className="list">
       {/* Exibe "No Todos" se a lista estiver vazia */}
-      {todos.length === 0 && "No Todos"}
+      {todos.length === 0 && "No Item"}
       
       {/* Mapeia a lista de todos para renderizar os componentes TodoItem */}
       {todos.map(todo => {
