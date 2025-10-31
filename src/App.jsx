@@ -1,43 +1,53 @@
-import { useState } from 'react'
-// import reactLogo from './assets/react.svg' // Mantive como comentário caso queira restaurar depois
-// import viteLogo from '/vite.svg' // Mantive como comentário caso queira restaurar depois
-import './App.css'
+// CORREÇÃO: Adicionamos a importação do React!
+import React, { useEffect, useState } from "react" 
+import { NewTodoForm } from "./NewTodoForm"
+import "./styles.css"
+import { TodoList } from "./TodoList"
 
-function App() {
-  // const [count, setCount] = useState(0) // Comentei o estado, pois o código de teste é simples.
+export default function App() {
+  const [todos, setTodos] = useState(() => {
+    const localValue = localStorage.getItem("ITEMS")
+    if (localValue == null) return []
 
-  // Retornando o código de teste simples e óbvio, conforme solicitado.
+    return JSON.parse(localValue)
+  })
+
+  useEffect(() => {
+    localStorage.setItem("ITEMS", JSON.stringify(todos))
+  }, [todos])
+
+  function addTodo(title) {
+    setTodos(currentTodos => {
+      return [
+        ...currentTodos,
+        { id: crypto.randomUUID(), title, completed: false },
+      ]
+    })
+  }
+
+  function toggleTodo(id, completed) {
+    setTodos(currentTodos => {
+      return currentTodos.map(todo => {
+        if (todo.id === id) {
+          return { ...todo, completed }
+        }
+
+        return todo
+      })
+    })
+  }
+
+  function deleteTodo(id) {
+    setTodos(currentTodos => {
+      return currentTodos.filter(todo => todo.id !== id)
+    })
+  }
+
   return (
-    <div style={{ backgroundColor: 'red', padding: '20px', color: 'white', textAlign: 'center' }}>
-      <h1>PROJETO ESTÁ FUNCIONANDO!</h1>
-      {/* O restante do seu código viria aqui (que antes eram os logos, botão de contagem, etc.) */}
-      {/* Se quiser restaurar o conteúdo anterior, descomente o código abaixo: */}
-      {/*
-      <>
-        <div>
-          <a href="https://vite.dev" target="_blank">
-            <img src={viteLogo} className="logo" alt="Vite logo" />
-          </a>
-          <a href="https://react.dev" target="_blank">
-            <img src={reactLogo} className="logo react" alt="React logo" />
-          </a>
-        </div>
-        <h1>Vite + React</h1>
-        <div className="card">
-          <button onClick={() => setCount((count) => count + 1)}>
-            count is {count}
-          </button>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test HMR
-          </p>
-        </div>
-        <p className="read-the-docs">
-          Click on the Vite and React logos to learn more
-        </p>
-      </>
-      */}
-    </div>
+    <>
+      <NewTodoForm onSubmit={addTodo} />
+      <h1 className="header">Todo List</h1>
+      <TodoList todos={todos} toggleTodo={toggleTodo} deleteTodo={deleteTodo} />
+    </>
   )
 }
-
-export default App
